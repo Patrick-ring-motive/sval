@@ -32,7 +32,7 @@ for (const name of files) {
       }
     }
   )
-  
+
   if (!fs.existsSync(path.resolve(__dirname, '../src/evaluate_n'))) {
     fs.mkdirSync(path.resolve(__dirname, '../src/evaluate_n'))
   }
