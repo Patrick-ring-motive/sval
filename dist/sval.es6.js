@@ -1561,8 +1561,7 @@
         } else {
           scope[kind](name, value);
         }
-        if (node.init &&
-          ['ClassExpression', 'FunctionExpression', 'ArrowFunctionExpression']
+        if (node.init && ['ClassExpression', 'FunctionExpression', 'ArrowFunctionExpression']
           .indexOf(node.init.type) !== -1 &&
           !value.name) {
           define(value, 'name', {
@@ -2730,8 +2729,7 @@
         } else {
           scope[kind](name, value);
         }
-        if (node.init &&
-          ['ClassExpression', 'FunctionExpression', 'ArrowFunctionExpression']
+        if (node.init && ['ClassExpression', 'FunctionExpression', 'ArrowFunctionExpression']
           .indexOf(node.init.type) !== -1 &&
           !value.name) {
           define(value, 'name', {
@@ -2880,8 +2878,7 @@
       if (statement.type === 'FunctionDeclaration') {
         funcDclrList.push(statement);
         funcDclrIdxs.push(i);
-      } else if (statement.type === 'VariableDeclaration' &&
-        ['const', 'let'].indexOf(statement.kind) !== -1) {
+      } else if (statement.type === 'VariableDeclaration' && ['const', 'let'].indexOf(statement.kind) !== -1) {
         yield* VariableDeclaration$1(statement, scope, {
           hoist: true,
           onlyBlock: true
@@ -3166,8 +3163,7 @@
       if (statement.type === 'FunctionDeclaration') {
         funcDclrList.push(statement);
         funcDclrIdxs.push(i);
-      } else if (statement.type === 'VariableDeclaration' &&
-        ['const', 'let'].indexOf(statement.kind) !== -1) {
+      } else if (statement.type === 'VariableDeclaration' && ['const', 'let'].indexOf(statement.kind) !== -1) {
         VariableDeclaration(statement, scope, {
           hoist: true,
           onlyBlock: true
