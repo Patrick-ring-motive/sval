@@ -1,7 +1,7 @@
 import Sval from '../src'
 
 describe('testing src/expression.ts', () => {
-  it('should call expression run normally', () => {  
+  it('should call expression run normally', () => {
     const interpreter = new Sval()
 
     class A {
@@ -12,7 +12,9 @@ describe('testing src/expression.ts', () => {
       }
     }
 
-    interpreter.import({ A })
+    interpreter.import({
+      A
+    })
     interpreter.run('exports.inst = new A().then()')
 
     expect(interpreter.exports.inst.a).toBe(2)
@@ -140,12 +142,14 @@ describe('testing src/expression.ts', () => {
       (exports.b = { c: { d: 1 } }).c.e = exports.b.c.d
       expect(exports.b.c.e).toBe(1)
     `
-    interpreter.import({ expect })
+    interpreter.import({
+      expect
+    })
     interpreter.run(`!async function(){${code}}()`) // also test for generator env
     interpreter.run(code)
   })
 
-  it ('should throw TypeError when assigning to constant', () => {
+  it('should throw TypeError when assigning to constant', () => {
     const interpreter = new Sval()
     let error = null
     try {
@@ -181,9 +185,11 @@ describe('testing src/expression.ts', () => {
     expect(interpreter.exports.d).toBe(2)
   })
 
-  it('should parse regular expression normally', () => {  
+  it('should parse regular expression normally', () => {
     const interpreter = new Sval()
-    interpreter.import({ expect })
+    interpreter.import({
+      expect
+    })
     interpreter.run(`
       const re = /\\/\\*<([^>]+?)>\\*\\/([\\s\\S]*?)\\/\\*<\\/([^>]+?)>\\*\\//g
       exports.a = '/*<add>*//*hello*//*</add>*/ /*<add>*//*world*//*</add>*/'
@@ -196,9 +202,11 @@ describe('testing src/expression.ts', () => {
     expect(interpreter.exports.a).toBe('hello world')
   })
 
-  it('should support object expression', () => {  
+  it('should support object expression', () => {
     const interpreter = new Sval()
-    interpreter.import({ expect })
+    interpreter.import({
+      expect
+    })
     interpreter.run(`
       const name = 'y'
       const values = { a: 1, b: 2 }
@@ -246,7 +254,7 @@ describe('testing src/expression.ts', () => {
     expect(interpreter.exports.b).toEqual(b)
   })
 
-  it('should support object expression with correct property descriptor', () => {  
+  it('should support object expression with correct property descriptor', () => {
     const interpreter = new Sval()
     interpreter.run(`
       const a = {
@@ -272,20 +280,22 @@ describe('testing src/expression.ts', () => {
       value: 5,
       writable: true
     })
-    
-    const yPD = Object.getOwnPropertyDescriptor(a, 'y')!
-    expect({
-      configurable: yPD.configurable,
-      enumerable: yPD.enumerable,
-    }).toEqual({
-      configurable: true,
-      enumerable: true,
-    })
+
+    const yPD = Object.getOwnPropertyDescriptor(a, 'y') !
+      expect({
+        configurable: yPD.configurable,
+        enumerable: yPD.enumerable,
+      }).toEqual({
+        configurable: true,
+        enumerable: true,
+      })
   })
 
-  it('should support logic expression', () => {  
+  it('should support logic expression', () => {
     const interpreter = new Sval()
-    interpreter.import({ expect })
+    interpreter.import({
+      expect
+    })
     interpreter.run(`
       const x = 0
       const y = true
@@ -297,7 +307,7 @@ describe('testing src/expression.ts', () => {
     `)
   })
 
-  it('should support method call with super + getter', () => {  
+  it('should support method call with super + getter', () => {
     const interpreter = new Sval()
     interpreter.run(`
       class X {
@@ -318,7 +328,7 @@ describe('testing src/expression.ts', () => {
     expect(interpreter.exports.result).toEqual(1)
   })
 
-  it('should support method call with computed name', () => {  
+  it('should support method call with computed name', () => {
     const interpreter = new Sval()
     interpreter.run(`
       var x = {
@@ -333,7 +343,7 @@ describe('testing src/expression.ts', () => {
     expect(interpreter.exports.result).toEqual(1)
   })
 
-  it('should support method call with computed name', () => {  
+  it('should support method call with computed name', () => {
     const interpreter = new Sval()
     interpreter.run(`
       exports.result = 1+!!2
@@ -342,7 +352,7 @@ describe('testing src/expression.ts', () => {
     expect(interpreter.exports.result).toEqual(2)
   })
 
-  it('should support all kinds of delete actions', () => {  
+  it('should support all kinds of delete actions', () => {
     const interpreter = new Sval()
     interpreter.run(`
       var x = {}
@@ -381,7 +391,7 @@ describe('testing src/expression.ts', () => {
   })
 
   // https://github.com/Siubaak/sval/issues/83
-  it('should support optional chaining', () => {  
+  it('should support optional chaining', () => {
     const interpreter = new Sval()
     interpreter.run(`
       var x = { a: { b: 1 }, c: null, e: () => 2 }
