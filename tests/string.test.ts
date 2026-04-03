@@ -3,7 +3,9 @@ import Sval from '../src'
 describe('testing src/index.ts', () => {
   it('should support unicode string', () => {
     const interpreter = new Sval()
-    interpreter.import({ expect })
+    interpreter.import({
+      expect
+    })
     interpreter.run(`
       const a = "\u0061"
       const b = "\uD842\uDFB7"
@@ -23,7 +25,7 @@ describe('testing src/index.ts', () => {
 
   })
 
-  it('should parse template element normally', () => {  
+  it('should parse template element normally', () => {
     const interpreter = new Sval()
     interpreter.run('const a = 1; exports.str = `a: ${a}`')
     expect(interpreter.exports.str).toBe('a: 1')
@@ -31,7 +33,9 @@ describe('testing src/index.ts', () => {
 
   it('should support tagged template string', () => {
     const interpreter = new Sval()
-    interpreter.import({ expect })
+    interpreter.import({
+      expect
+    })
     interpreter.run(`
       function tag(stringArr, value1, value2){
         expect(stringArr).toEqual(['hello ', ' sval ', ''])
