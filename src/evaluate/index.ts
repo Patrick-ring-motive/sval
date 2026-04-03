@@ -13,7 +13,8 @@ import * as statement from './statement'
 import * as literal from './literal'
 import * as pattern from './pattern'
 /*<add>*/
-/*import * as program from './program'*/ /*</add>*/
+/*import * as program from './program'*/
+/*</add>*/
 
 let evaluateOps: any
 
@@ -30,7 +31,8 @@ export default function* evaluate(node: Node, scope: Scope) {
       literal,
       pattern,
       /*<add>*/
-      /*program*/ /*</add>*/
+      /*program*/
+      /*</add>*/
     )
   }
 
