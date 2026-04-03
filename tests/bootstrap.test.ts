@@ -1,6 +1,13 @@
-import { readFileSync, existsSync } from 'fs'
-import { ecmaVersion } from 'acorn'
-import { resolve } from 'path'
+import {
+  readFileSync,
+  existsSync
+} from 'fs'
+import {
+  ecmaVersion
+} from 'acorn'
+import {
+  resolve
+} from 'path'
 import Sval from '../src'
 
 let code: string
@@ -13,13 +20,13 @@ if (existsSync(codePath)) {
 }
 
 describe('testing src/index.ts', () => {
-  it('should compile normally', () => {  
+  it('should compile normally', () => {
     const interpreter = new Sval()
     interpreter.run(`!async function(){${code}}()`) // also test for generator env
     interpreter.run(code)
   })
 
-  it('should compile normally in generator env', () => {  
+  it('should compile normally in generator env', () => {
     const interpreter = new Sval()
     interpreter.run(`!async function(){${code}}()`)
   })
@@ -37,8 +44,8 @@ describe('testing src/index.ts', () => {
     expect((window as any).x1).toBe(5)
     expect((window as any).y1).toBe(6)
 
-    delete (window as any).x1
-    delete (window as any).y1
+    delete(window as any).x1
+    delete(window as any).y1
   })
 
   it('should support sandbox mode', () => {
@@ -61,11 +68,15 @@ describe('testing src/index.ts', () => {
       2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024,
       'latest'
     ]
-    versions.forEach((v) => new Sval({ ecmaVer: v }))
+    versions.forEach((v) => new Sval({
+      ecmaVer: v
+    }))
 
     try {
-      new Sval({ ecmaVer: 4 as any })
-    } catch(ex) {
+      new Sval({
+        ecmaVer: 4 as any
+      })
+    } catch (ex) {
       expect(ex.message).toBe('unsupported ecmaVer')
     }
   })
@@ -74,7 +85,9 @@ describe('testing src/index.ts', () => {
     const bar = 'bar'
     const modules = {
       foo: 'foo',
-      bar: function() { return bar } 
+      bar: function() {
+        return bar
+      }
     }
 
     const interpreter = new Sval()
@@ -89,7 +102,7 @@ describe('testing src/index.ts', () => {
 
     // append more modules
     interpreter.import('hello', 'world')
-    interpreter.import([3,2]) // support array, supported but should be avoided
+    interpreter.import([3, 2]) // support array, supported but should be avoided
     interpreter.run(`
       exports.hello = hello
       exports.idx0 = window[0]
