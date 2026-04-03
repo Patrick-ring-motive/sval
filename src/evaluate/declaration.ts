@@ -1,7 +1,21 @@
-import { NOINIT, DEADZONE, PRIVATE } from '../share/const'
-import { pattern, createFunc, createClass } from './helper'
-import { define, getDptor, assign } from '../share/util'
-import { VarKind } from '../scope/variable'
+import {
+  NOINIT,
+  DEADZONE,
+  PRIVATE
+} from '../share/const'
+import {
+  pattern,
+  createFunc,
+  createClass
+} from './helper'
+import {
+  define,
+  getDptor,
+  assign
+} from '../share/util'
+import {
+  VarKind
+} from '../scope/variable'
 import * as acorn from 'acorn'
 import Scope from '../scope'
 import evaluate from '.'
@@ -9,14 +23,14 @@ import evaluate from '.'
 export function* FunctionDeclaration(
   node: acorn.FunctionDeclaration,
   scope: Scope
-): IterableIterator<any> {
+): IterableIterator < any > {
   scope.func(node.id.name, createFunc(node, scope))
 }
 
 export interface VariableDeclarationOptions {
-  hoist?: boolean
-  onlyBlock?: boolean
-  feed?: any
+  hoist ? : boolean
+  onlyBlock ? : boolean
+  feed ? : any
 }
 
 export function* VariableDeclaration(
@@ -25,12 +39,14 @@ export function* VariableDeclaration(
   options: VariableDeclarationOptions = {},
 ) {
   for (let i = 0; i < node.declarations.length; i++) {
-    yield* VariableDeclarator(node.declarations[i], scope, assign({ kind: node.kind }, options))
+    yield* VariableDeclarator(node.declarations[i], scope, assign({
+      kind: node.kind
+    }, options))
   }
 }
 
 export interface VariableDeclaratorOptions {
-  kind?: VarKind
+  kind ? : VarKind
 }
 
 export function* VariableDeclarator(
@@ -38,13 +54,19 @@ export function* VariableDeclarator(
   scope: Scope,
   options: VariableDeclaratorOptions & VariableDeclarationOptions = {},
 ) {
-  const { kind = 'var', hoist = false, onlyBlock = false, feed } = options
+  const {
+    kind = 'var', hoist = false, onlyBlock = false, feed
+  } = options
   if (hoist) {
     if (onlyBlock || kind === 'var') {
       if (node.id.type === 'Identifier') {
         scope[kind](node.id.name, onlyBlock ? DEADZONE : kind === 'var' ? NOINIT : undefined)
       } else {
-        yield* pattern(node.id, scope, { kind, hoist, onlyBlock })
+        yield* pattern(node.id, scope, {
+          kind,
+          hoist,
+          onlyBlock
+        })
       }
     }
   } else {
@@ -58,10 +80,10 @@ export function* VariableDeclarator(
         scope[kind](name, value)
       }
       if (
-        node.init
-        && ['ClassExpression', 'FunctionExpression', 'ArrowFunctionExpression']
-          .indexOf(node.init.type) !== -1
-        && !value.name
+        node.init &&
+        ['ClassExpression', 'FunctionExpression', 'ArrowFunctionExpression']
+        .indexOf(node.init.type) !== -1 &&
+        !value.name
       ) {
         define(value, 'name', {
           value: name,
@@ -69,7 +91,10 @@ export function* VariableDeclarator(
         })
       }
     } else {
-      yield* pattern(node.id, scope, { kind, feed: value })
+      yield* pattern(node.id, scope, {
+        kind,
+        feed: value
+      })
     }
   }
 }
@@ -77,32 +102,47 @@ export function* VariableDeclarator(
 export function* ClassDeclaration(
   node: acorn.ClassDeclaration,
   scope: Scope
-): IterableIterator<any> {
+): IterableIterator < any > {
   scope.func(node.id.name, yield* createClass(node, scope))
 }
 
 export interface ClassOptions {
-  klass?: any,
-  superClass?: (...args: any[]) => void
+  klass ? : any,
+    superClass ? : (...args: any[]) => void
 }
 
 export function* ClassBody(node: acorn.ClassBody, scope: Scope, options: ClassOptions = {}) {
-  const { klass, superClass } = options
+  const {
+    klass,
+    superClass
+  } = options
 
   for (let i = 0; i < node.body.length; i++) {
     const def = node.body[i]
     if (def.type === 'MethodDefinition') {
-      yield* MethodDefinition(def, scope, { klass, superClass })
+      yield* MethodDefinition(def, scope, {
+        klass,
+        superClass
+      })
     } else if (def.type === 'PropertyDefinition' && def.static) {
-      yield* PropertyDefinition(def, scope, { klass, superClass })
+      yield* PropertyDefinition(def, scope, {
+        klass,
+        superClass
+      })
     } else if (def.type === 'StaticBlock') {
-      yield* StaticBlock(def, scope, { klass, superClass })
+      yield* StaticBlock(def, scope, {
+        klass,
+        superClass
+      })
     }
   }
 }
 
 export function* MethodDefinition(node: acorn.MethodDefinition, scope: Scope, options: ClassOptions = {}) {
-  const { klass, superClass } = options
+  const {
+    klass,
+    superClass
+  } = options
 
   let key: string
   let priv: boolean = false
@@ -122,12 +162,16 @@ export function* MethodDefinition(node: acorn.MethodDefinition, scope: Scope, op
 
   if (priv) {
     if (!obj[PRIVATE]) {
-      define(obj, PRIVATE, { value: Object.create(null) });
+      define(obj, PRIVATE, {
+        value: Object.create(null)
+      });
     }
     obj = obj[PRIVATE]
   }
 
-  const value = createFunc(node.value, scope, { superClass })
+  const value = createFunc(node.value, scope, {
+    superClass
+  })
 
   switch (node.kind) {
     case 'constructor':
@@ -159,11 +203,14 @@ export function* MethodDefinition(node: acorn.MethodDefinition, scope: Scope, op
     }
     default:
       throw new SyntaxError('Unexpected token')
-  } 
+  }
 }
 
 export function* PropertyDefinition(node: acorn.PropertyDefinition, scope: Scope, options: ClassOptions = {}) {
-  const { klass, superClass } = options
+  const {
+    klass,
+    superClass
+  } = options
 
   let key: string
   let priv: boolean = false
@@ -183,13 +230,18 @@ export function* PropertyDefinition(node: acorn.PropertyDefinition, scope: Scope
 
   if (priv) {
     if (!obj[PRIVATE]) {
-      define(obj, PRIVATE, { value: Object.create(null) });
+      define(obj, PRIVATE, {
+        value: Object.create(null)
+      });
     }
     obj = obj[PRIVATE]
   }
 
   if (node.value.type === 'FunctionExpression' || node.value.type === 'ArrowFunctionExpression') {
-    obj[key] = createFunc(node.value, scope, { superClass, defProp: true })
+    obj[key] = createFunc(node.value, scope, {
+      superClass,
+      defProp: true
+    })
   } else {
     obj[key] = yield* evaluate(node.value, scope)
   }
