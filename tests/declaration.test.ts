@@ -1,7 +1,7 @@
 import Sval from '../src'
 
 describe('testing src/index.ts', () => {
-  it('should declare var normally', () => {  
+  it('should declare var normally', () => {
     const interpreter = new Sval()
     const code = `
       var a
@@ -67,7 +67,7 @@ describe('testing src/index.ts', () => {
     expect(interpreter.exports.h4()).toBe('h4')
   })
 
-  it('should declare let normally', () => {  
+  it('should declare let normally', () => {
     const interpreter = new Sval()
     const code = `
       let a = 1
@@ -91,7 +91,7 @@ describe('testing src/index.ts', () => {
     expect(interpreter.exports.d()).toBe('d')
   })
 
-  it('should declare const normally', () => {  
+  it('should declare const normally', () => {
     const interpreter = new Sval()
     interpreter.run(`
       const a = 1
@@ -100,9 +100,11 @@ describe('testing src/index.ts', () => {
     expect(interpreter.exports.a).toBe(1)
   })
 
-  it('should declare var in global env normally', () => {  
+  it('should declare var in global env normally', () => {
     const interpreter = new Sval()
-    interpreter.import({ expect })
+    interpreter.import({
+      expect
+    })
     interpreter.run(`
       var a = 1
 
@@ -138,7 +140,7 @@ describe('testing src/index.ts', () => {
     `)
   })
 
-  it('should throw SyntaxError when declaring multiple times with `let`', () => {  
+  it('should throw SyntaxError when declaring multiple times with `let`', () => {
     const interpreter = new Sval()
 
     try {
@@ -151,7 +153,7 @@ describe('testing src/index.ts', () => {
     }
   })
 
-  it('should throw SyntaxError when declaring multiple times with `const`', () => {  
+  it('should throw SyntaxError when declaring multiple times with `const`', () => {
     const interpreter = new Sval()
 
     let err
@@ -167,7 +169,7 @@ describe('testing src/index.ts', () => {
     expect(err).toBeInstanceOf(SyntaxError)
   })
 
-  it('should throw SyntaxError when declaring `const` without initializer', () => {  
+  it('should throw SyntaxError when declaring `const` without initializer', () => {
     const interpreter = new Sval()
 
     let err
@@ -182,7 +184,7 @@ describe('testing src/index.ts', () => {
     expect(err).toBeInstanceOf(SyntaxError)
   })
 
-  it('should support declare variable with sequence', () => {  
+  it('should support declare variable with sequence', () => {
     const interpreter = new Sval()
 
     const code = `
@@ -214,7 +216,7 @@ describe('testing src/index.ts', () => {
     expect(interpreter.exports.cb()).toBe(3)
   })
 
-  it('should throw SyntaxError when const does not have initializer in sequence', () => {  
+  it('should throw SyntaxError when const does not have initializer in sequence', () => {
     const interpreter = new Sval()
 
     try {
@@ -225,12 +227,12 @@ describe('testing src/index.ts', () => {
         exports.cb = cb
         exports.cc = cc
       `)
-    } catch(err) {
+    } catch (err) {
       expect(err).toBeInstanceOf(SyntaxError)
     }
   })
 
-  it('should support nested variable definition within global + block', () => {  
+  it('should support nested variable definition within global + block', () => {
     const interpreter = new Sval()
 
     const code = `
@@ -261,7 +263,7 @@ describe('testing src/index.ts', () => {
     expect(interpreter.exports.outerC).toBe(6)
   })
 
-  it('should support nested variable definition within global + function', () => {  
+  it('should support nested variable definition within global + function', () => {
     const interpreter = new Sval()
 
     interpreter.run(`
@@ -291,7 +293,7 @@ describe('testing src/index.ts', () => {
     expect(interpreter.exports.outerC).toBe(5)
   })
 
-  it('should support self executing function', () => {  
+  it('should support self executing function', () => {
     const interpreter = new Sval()
 
     interpreter.run(`
