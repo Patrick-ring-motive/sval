@@ -1,14 +1,18 @@
-import { DEADZONE } from '../share/const'
+import {
+  DEADZONE
+} from '../share/const'
 import * as acorn from 'acorn'
 import Scope from '../scope'
 
 export interface IdentifierOptions {
-  getVar?: boolean
-  throwErr?: boolean
+  getVar ? : boolean
+  throwErr ? : boolean
 }
 
 export function* Identifier(node: acorn.Identifier, scope: Scope, options: IdentifierOptions = {}) {
-  const { getVar = false, throwErr = true } = options
+  const {
+    getVar = false, throwErr = true
+  } = options
 
   if (node.name === 'undefined') {
     return undefined
@@ -31,4 +35,3 @@ export function* Identifier(node: acorn.Identifier, scope: Scope, options: Ident
     return undefined
   }
 }
-
