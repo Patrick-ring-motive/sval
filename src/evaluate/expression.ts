@@ -1,9 +1,37 @@
-import { define, freeze, getGetter, getSetter, createSymbol, assign, getDptor, WINDOW } from '../share/util'
-import { SUPER, NOCTOR, AWAIT, CLSCTOR, NEWTARGET, SUPERCALL, PRIVATE } from '../share/const'
-import { pattern, createFunc, createClass } from './helper'
-import { Variable, Prop } from '../scope/variable'
-import { Identifier } from './identifier'
-import { Literal } from './literal'
+import {
+  define,
+  freeze,
+  getGetter,
+  getSetter,
+  createSymbol,
+  assign,
+  getDptor,
+  WINDOW
+} from '../share/util'
+import {
+  SUPER,
+  NOCTOR,
+  AWAIT,
+  CLSCTOR,
+  NEWTARGET,
+  SUPERCALL,
+  PRIVATE
+} from '../share/const'
+import {
+  pattern,
+  createFunc,
+  createClass
+} from './helper'
+import {
+  Variable,
+  Prop
+} from '../scope/variable'
+import {
+  Identifier
+} from './identifier'
+import {
+  Literal
+} from './literal'
 import * as acorn from 'acorn'
 import Scope from '../scope'
 import evaluate from '.'
@@ -11,8 +39,8 @@ import evaluate from '.'
 export function* ThisExpression(node: acorn.ThisExpression, scope: Scope) {
   const superCall = scope.find(SUPERCALL)
   if (superCall && !superCall.get()) {
-    throw new ReferenceError('Must call super constructor in derived class '
-      + 'before accessing \'this\' or returning from derived constructor')
+    throw new ReferenceError('Must call super constructor in derived class ' +
+      'before accessing \'this\' or returning from derived constructor')
   } else {
     return scope.find('this').get()
   }
@@ -32,7 +60,9 @@ export function* ArrayExpression(node: acorn.ArrayExpression, scope: Scope) {
 }
 
 export function* ObjectExpression(node: acorn.ObjectExpression, scope: Scope) {
-  const object: { [key: string]: any } = {}
+  const object: {
+    [key: string]: any
+  } = {}
   for (let i = 0; i < node.properties.length; i++) {
     const property = node.properties[i]
     if (property.type === 'SpreadElement') {
@@ -49,9 +79,9 @@ export function* ObjectExpression(node: acorn.ObjectExpression, scope: Scope) {
           key = '' + (yield* Literal(propKey as acorn.Literal, scope))
         }
       }
-  
+
       const value = yield* evaluate(property.value, scope)
-  
+
       const propKind = property.kind
       if (propKind === 'init') {
         object[key] = value
@@ -93,20 +123,29 @@ export function* FunctionExpression(node: acorn.FunctionExpression, scope: Scope
 export function* UnaryExpression(node: acorn.UnaryExpression, scope: Scope) {
   const arg = node.argument
   switch (node.operator) {
-    case '+': return +(yield* evaluate(arg, scope))
-    case '-': return -(yield* evaluate(arg, scope))
-    case '!': return !(yield* evaluate(arg, scope))
-    case '~': return ~(yield* evaluate(arg, scope))
-    case 'void': return void (yield* evaluate(arg, scope))
+    case '+':
+      return +(yield* evaluate(arg, scope))
+    case '-':
+      return -(yield* evaluate(arg, scope))
+    case '!':
+      return !(yield* evaluate(arg, scope))
+    case '~':
+      return ~(yield* evaluate(arg, scope))
+    case 'void':
+      return void(yield* evaluate(arg, scope))
     case 'typeof':
       if (arg.type === 'Identifier') {
-        return typeof (yield* Identifier(arg, scope, { throwErr: false }))
+        return typeof(yield* Identifier(arg, scope, {
+          throwErr: false
+        }))
       } else {
-        return typeof (yield* evaluate(arg, scope))
+        return typeof(yield* evaluate(arg, scope))
       }
     case 'delete':
       if (arg.type === 'MemberExpression') {
-        const variable: Prop = yield* MemberExpression(arg, scope, { getVar: true })
+        const variable: Prop = yield* MemberExpression(arg, scope, {
+          getVar: true
+        })
         return variable.del()
       } else if (arg.type === 'Identifier') {
         throw new SyntaxError('Delete of an unqualified identifier in strict mode')
@@ -114,19 +153,24 @@ export function* UnaryExpression(node: acorn.UnaryExpression, scope: Scope) {
         yield* evaluate(arg, scope)
         return true
       }
-    /* istanbul ignore next */
-    default: throw new SyntaxError(`Unexpected token ${node.operator}`)
+      /* istanbul ignore next */
+    default:
+      throw new SyntaxError(`Unexpected token ${node.operator}`)
   }
 }
 
 export function* UpdateExpression(node: acorn.UpdateExpression, scope: Scope) {
   const arg = node.argument
-  
+
   let variable: Variable
   if (arg.type === 'Identifier') {
-    variable = yield* Identifier(arg, scope, { getVar: true })
+    variable = yield* Identifier(arg, scope, {
+      getVar: true
+    })
   } else if (arg.type === 'MemberExpression') {
-    variable = yield* MemberExpression(arg, scope, { getVar: true })
+    variable = yield* MemberExpression(arg, scope, {
+      getVar: true
+    })
   } else {
     /* istanbul ignore next */
     throw new SyntaxError('Unexpected token')
@@ -150,30 +194,53 @@ export function* BinaryExpression(node: acorn.BinaryExpression, scope: Scope) {
   const right = yield* evaluate(node.right, scope)
 
   switch (node.operator) {
-    case '==': return left == right
-    case '!=': return left != right
-    case '===': return left === right
-    case '!==': return left !== right
-    case '<': return left < right
-    case '<=': return left <= right
-    case '>': return left > right
-    case '>=': return left >= right
-    case '<<': return left << right
-    case '>>': return left >> right
-    case '>>>': return left >>> right
-    case '+': return left + right
-    case '-': return left - right
-    case '*': return left * right
-    case '**': return left ** right
-    case '/': return left / right
-    case '%': return left % right
-    case '|': return left | right
-    case '^': return left ^ right
-    case '&': return left & right
-    case 'in': return left in right
-    case 'instanceof': return left instanceof right
-    /* istanbul ignore next */
-    default: throw new SyntaxError(`Unexpected token ${node.operator}`)
+    case '==':
+      return left == right
+    case '!=':
+      return left != right
+    case '===':
+      return left === right
+    case '!==':
+      return left !== right
+    case '<':
+      return left < right
+    case '<=':
+      return left <= right
+    case '>':
+      return left > right
+    case '>=':
+      return left >= right
+    case '<<':
+      return left << right
+    case '>>':
+      return left >> right
+    case '>>>':
+      return left >>> right
+    case '+':
+      return left + right
+    case '-':
+      return left - right
+    case '*':
+      return left * right
+    case '**':
+      return left ** right
+    case '/':
+      return left / right
+    case '%':
+      return left % right
+    case '|':
+      return left | right
+    case '^':
+      return left ^ right
+    case '&':
+      return left & right
+    case 'in':
+      return left in right
+    case 'instanceof':
+      return left instanceof right
+      /* istanbul ignore next */
+    default:
+      throw new SyntaxError(`Unexpected token ${node.operator}`)
   }
 }
 
@@ -181,38 +248,78 @@ export function* AssignmentExpression(node: acorn.AssignmentExpression, scope: S
   const left = node.left
   let variable: Variable
   if (left.type === 'Identifier') {
-    variable = yield* Identifier(left, scope, { getVar: true, throwErr: false })
+    variable = yield* Identifier(left, scope, {
+      getVar: true,
+      throwErr: false
+    })
     if (!variable) {
       const win = scope.global().find('window').get()
       variable = new Prop(win, left.name)
     }
   } else if (left.type === 'MemberExpression') {
-    variable = yield* MemberExpression(left, scope, { getVar: true })
+    variable = yield* MemberExpression(left, scope, {
+      getVar: true
+    })
   } else {
     const value = yield* evaluate(node.right, scope)
-    return yield* pattern(left, scope, { feed: value })
+    return yield* pattern(left, scope, {
+      feed: value
+    })
   }
 
   const value = yield* evaluate(node.right, scope)
   switch (node.operator) {
-    case '=': variable.set(value); return variable.get()
-    case '+=': variable.set(variable.get() + value); return variable.get()
-    case '-=': variable.set(variable.get() - value); return variable.get()
-    case '*=': variable.set(variable.get() * value); return variable.get()
-    case '/=': variable.set(variable.get() / value); return variable.get()
-    case '%=': variable.set(variable.get() % value); return variable.get()
-    case '**=': variable.set(variable.get() ** value); return variable.get()
-    case '<<=': variable.set(variable.get() << value); return variable.get()
-    case '>>=': variable.set(variable.get() >> value); return variable.get()
-    case '>>>=': variable.set(variable.get() >>> value); return variable.get()
-    case '|=': variable.set(variable.get() | value); return variable.get()
-    case '^=': variable.set(variable.get() ^ value); return variable.get()
-    case '&=': variable.set(variable.get() & value); return variable.get()
-    case '??=': variable.set(variable.get() ?? value); return variable.get()
-    case '&&=': variable.set(variable.get() && value); return variable.get()
-    case '||=': variable.set(variable.get() || value); return variable.get()
-    /* istanbul ignore next */
-    default: throw new SyntaxError(`Unexpected token ${node.operator}`)
+    case '=':
+      variable.set(value);
+      return variable.get()
+    case '+=':
+      variable.set(variable.get() + value);
+      return variable.get()
+    case '-=':
+      variable.set(variable.get() - value);
+      return variable.get()
+    case '*=':
+      variable.set(variable.get() * value);
+      return variable.get()
+    case '/=':
+      variable.set(variable.get() / value);
+      return variable.get()
+    case '%=':
+      variable.set(variable.get() % value);
+      return variable.get()
+    case '**=':
+      variable.set(variable.get() ** value);
+      return variable.get()
+    case '<<=':
+      variable.set(variable.get() << value);
+      return variable.get()
+    case '>>=':
+      variable.set(variable.get() >> value);
+      return variable.get()
+    case '>>>=':
+      variable.set(variable.get() >>> value);
+      return variable.get()
+    case '|=':
+      variable.set(variable.get() | value);
+      return variable.get()
+    case '^=':
+      variable.set(variable.get() ^ value);
+      return variable.get()
+    case '&=':
+      variable.set(variable.get() & value);
+      return variable.get()
+    case '??=':
+      variable.set(variable.get() ?? value);
+      return variable.get()
+    case '&&=':
+      variable.set(variable.get() && value);
+      return variable.get()
+    case '||=':
+      variable.set(variable.get() || value);
+      return variable.get()
+      /* istanbul ignore next */
+    default:
+      throw new SyntaxError(`Unexpected token ${node.operator}`)
   }
 }
 
@@ -231,8 +338,8 @@ export function* LogicalExpression(node: acorn.LogicalExpression, scope: Scope) 
 }
 
 export interface MemberExpressionOptions {
-  getObj?: boolean
-  getVar?: boolean
+  getObj ? : boolean
+  getVar ? : boolean
 }
 
 export function* MemberExpression(
@@ -240,11 +347,15 @@ export function* MemberExpression(
   scope: Scope,
   options: MemberExpressionOptions = {},
 ) {
-  const { getObj = false, getVar = false } = options
+  const {
+    getObj = false, getVar = false
+  } = options
 
   let object: any
   if (node.object.type === 'Super') {
-    object = yield* Super(node.object, scope, { getProto: true })
+    object = yield* Super(node.object, scope, {
+      getProto: true
+    })
   } else {
     object = yield* evaluate(node.object, scope)
   }
@@ -274,7 +385,9 @@ export function* MemberExpression(
       // transfer the setter from super to this with a private key
       const thisObject = scope.find('this').get()
       const privateKey = createSymbol(key)
-      define(thisObject, privateKey, { set: setter })
+      define(thisObject, privateKey, {
+        set: setter
+      })
       return new Prop(thisObject, privateKey)
     } else {
       return new Prop(object, key)
@@ -300,9 +413,9 @@ export function* MemberExpression(
 }
 
 export function* ConditionalExpression(node: acorn.ConditionalExpression, scope: Scope) {
-  return (yield* evaluate(node.test, scope))
-    ? (yield* evaluate(node.consequent, scope))
-    : (yield* evaluate(node.alternate, scope))
+  return (yield* evaluate(node.test, scope)) ?
+    (yield* evaluate(node.consequent, scope)) :
+    (yield* evaluate(node.alternate, scope))
 }
 
 export function* CallExpression(node: acorn.CallExpression, scope: Scope) {
@@ -310,7 +423,9 @@ export function* CallExpression(node: acorn.CallExpression, scope: Scope) {
   let object: any
 
   if (node.callee.type === 'MemberExpression') {
-    object = yield* MemberExpression(node.callee, scope, { getObj: true })
+    object = yield* MemberExpression(node.callee, scope, {
+      getObj: true
+    })
 
     // if it's optional chaining, check if object is null or undefined, so use ==
     if (node.callee.optional && object == null) {
@@ -517,7 +632,7 @@ export function* ClassExpression(node: acorn.ClassExpression, scope: Scope) {
 }
 
 export interface SuperOptions {
-  getProto?: boolean
+  getProto ? : boolean
 }
 
 export function* Super(
@@ -525,9 +640,11 @@ export function* Super(
   scope: Scope,
   options: SuperOptions = {},
 ) {
-  const { getProto = false } = options
+  const {
+    getProto = false
+  } = options
   const superClass = scope.find(SUPER).get()
-  return getProto ? superClass.prototype: superClass
+  return getProto ? superClass.prototype : superClass
 }
 
 export function* SpreadElement(node: acorn.SpreadElement, scope: Scope) {
@@ -541,7 +658,7 @@ export function* ChainExpression(node: acorn.ChainExpression, scope: Scope) {
 /*<remove>*/
 export function* YieldExpression(node: acorn.YieldExpression, scope: Scope): any {
   const res = yield* evaluate(node.argument, scope)
-  return node.delegate ? yield* res : yield res
+  return node.delegate ? yield* res: yield res
 }
 
 export function* AwaitExpression(node: acorn.AwaitExpression, scope: Scope): any {
