@@ -1,17 +1,24 @@
-import { AWAIT } from './const'
+import {
+  AWAIT
+} from './const'
 
 export interface runAsyncOptions {
-  res?: any
-  err?: any
-  ret?: any
-  fullRet?: boolean
+  res ? : any
+  err ? : any
+  ret ? : any
+  fullRet ? : boolean
 }
 
 export function runAsync(
-  iterator: IterableIterator<any>,
+  iterator: IterableIterator < any > ,
   options: runAsyncOptions = {}
-): Promise<any> {
-  const { res, err, ret, fullRet } = options
+): Promise < any > {
+  const {
+    res,
+    err,
+    ret,
+    fullRet
+  } = options
   return new Promise((resolve, reject) => {
     if ('ret' in options) {
       return resolve(iterator.return(ret))
@@ -21,6 +28,7 @@ export function runAsync(
     } else {
       onFulfilled(res)
     }
+
     function onFulfilled(res: any) {
       let ret: any
       try {
@@ -31,6 +39,7 @@ export function runAsync(
       next(ret)
       return null
     }
+
     function onRejected(err: any) {
       let ret: any
       try {
@@ -40,12 +49,13 @@ export function runAsync(
       }
       next(ret)
     }
+
     function next(ret: any) {
       if (ret.done) return resolve(fullRet ? ret : ret.value)
       if (ret.value !== AWAIT) return resolve(ret)
       const awaitValue = ret.value.RES
-      const value = awaitValue && awaitValue.then === 'function'
-        ? awaitValue : Promise.resolve(awaitValue)
+      const value = awaitValue && awaitValue.then === 'function' ?
+        awaitValue : Promise.resolve(awaitValue)
       return value.then(onFulfilled, onRejected)
     }
   })
