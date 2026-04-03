@@ -1,14 +1,29 @@
-import { parse, Options, ecmaVersion, Node, Program } from 'acorn'
-import { getOwnNames, createSandBox, globalObj, assign } from './share/util'
-import { version } from '../package.json'
+import {
+  parse,
+  Options,
+  ecmaVersion,
+  Node,
+  Program
+} from 'acorn'
+import {
+  getOwnNames,
+  createSandBox,
+  globalObj,
+  assign
+} from './share/util'
+import {
+  version
+} from '../package.json'
 import Scope from './scope'
 
-import { hoist } from './evaluate_n/helper'
+import {
+  hoist
+} from './evaluate_n/helper'
 import evaluate from './evaluate_n'
 
 export interface SvalOptions {
-  ecmaVer?: ecmaVersion
-  sandBox?: boolean
+  ecmaVer ? : ecmaVersion
+  sandBox ? : boolean
 }
 
 const latestVer = 15
@@ -16,13 +31,19 @@ const latestVer = 15
 class Sval {
   static version: string = version
 
-  private options: Options = { ecmaVersion: 'latest' }
+  private options: Options = {
+    ecmaVersion: 'latest'
+  }
   private scope = new Scope(null, true)
 
-  exports: { [name: string]: any } = {}
+  exports: {
+    [name: string]: any
+  } = {}
 
   constructor(options: SvalOptions = {}) {
-    let { ecmaVer = 'latest', sandBox = true } = options
+    let {
+      ecmaVer = 'latest', sandBox = true
+    } = options
 
     if (typeof ecmaVer === 'number') {
       ecmaVer -= ecmaVer < 2015 ? 0 : 2009 // format ecma edition
@@ -43,28 +64,33 @@ class Sval {
       this.scope.let('window', globalObj)
       this.scope.let('this', globalObj)
     }
-    
+
     this.scope.const('exports', this.exports = {})
   }
 
-  import(nameOrModules: string | { [name: string]: any }, mod?: any) {
+  import(nameOrModules: string | {
+    [name: string]: any
+  }, mod ? : any) {
     if (typeof nameOrModules === 'string') {
-      nameOrModules = { [nameOrModules]: mod }
+      nameOrModules = {
+        [nameOrModules]: mod
+      }
     }
 
     if (typeof nameOrModules !== 'object') return
 
     const names = getOwnNames(nameOrModules)
-    
+
     for (let i = 0; i < names.length; i++) {
       const name = names[i]
       this.scope.var(name, nameOrModules[name])
     }
   }
 
-  parse(code: string, parser?: (code: string, options: SvalOptions) => Node) {
+  parse(code: string, parser ? : (code: string, options: SvalOptions) => Node) {
     if (typeof parser === 'function') {
-      return parser(code, assign({} as SvalOptions, this.options))
+      return parser(code, assign({}
+        as SvalOptions, this.options))
     }
     return parse(code, this.options)
   }
