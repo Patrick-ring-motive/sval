@@ -209,7 +209,7 @@ describe('testing src/index.ts', () => {
 
     expect(error).toBeInstanceOf(TypeError)
   })
-  
+
   it('should call super normally', () => {
     const interpreter = new Sval()
     interpreter.run(`
@@ -389,7 +389,7 @@ describe('testing src/index.ts', () => {
 
         }
       `)
-    } catch(err) {
+    } catch (err) {
       expect(err).toBeInstanceOf(ReferenceError)
     }
   })
@@ -492,7 +492,7 @@ describe('testing src/index.ts', () => {
     expect(instance.getA()).resolves.toBe(1)
   })
 
-  it('should support property accessing between parent and child class', () => {  
+  it('should support property accessing between parent and child class', () => {
     const interpreter = new Sval()
     interpreter.run(`
       class X {
