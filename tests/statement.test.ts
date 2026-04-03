@@ -1,7 +1,7 @@
 import Sval from '../src'
 
 describe('testing src/index.ts', () => {
-  it('should for statement run normally', () => {  
+  it('should for statement run normally', () => {
     const interpreter = new Sval()
     interpreter.run(`
       for (let i = 0; i < 5; i++) {
@@ -10,7 +10,7 @@ describe('testing src/index.ts', () => {
     `)
   })
 
-  it('should break statement in switch run normally', () => {  
+  it('should break statement in switch run normally', () => {
     const interpreter = new Sval()
     interpreter.run(`
       exports.a = 0
@@ -24,7 +24,7 @@ describe('testing src/index.ts', () => {
     expect(interpreter.exports.a).toEqual(10)
   })
 
-  it('should for-in statement run normally', () => {  
+  it('should for-in statement run normally', () => {
     const interpreter = new Sval()
     interpreter.run(`
       exports.a = []
@@ -35,7 +35,7 @@ describe('testing src/index.ts', () => {
     expect(interpreter.exports.a).toEqual(['0', '1', '2'])
   })
 
-  it('should for-of statement run normally', () => {  
+  it('should for-of statement run normally', () => {
     const interpreter = new Sval()
     interpreter.run(`
       exports.a = []
@@ -46,9 +46,13 @@ describe('testing src/index.ts', () => {
     expect(interpreter.exports.a).toEqual([1, 2, 3])
   })
 
-  it('should for-await-of statement run normally', done => {  
+  it('should for-await-of statement run normally', done => {
     const interpreter = new Sval()
-    interpreter.import({ getItem, expect, done })
+    interpreter.import({
+      getItem,
+      expect,
+      done
+    })
     interpreter.run(`
       b()
       async function* a() {
@@ -65,14 +69,18 @@ describe('testing src/index.ts', () => {
         done()
       }
     `)
+
     function getItem(n: any) {
       return new Promise(resolve => setTimeout(resolve, 5, n))
     }
   })
 
-  it('should for-await-of with manual iterator run normally', done => {  
+  it('should for-await-of with manual iterator run normally', done => {
     const interpreter = new Sval()
-    interpreter.import({ expect, done })
+    interpreter.import({
+      expect,
+      done
+    })
     interpreter.run(`
       c()
       function makeIterator(array) {
@@ -97,9 +105,12 @@ describe('testing src/index.ts', () => {
     `)
   })
 
-  it('should support for-await-of with sync iterables', done => {  
+  it('should support for-await-of with sync iterables', done => {
     const interpreter = new Sval()
-    interpreter.import({ expect, done })
+    interpreter.import({
+      expect,
+      done
+    })
     interpreter.run(`
       (async function run() {
         const res = []
@@ -125,9 +136,12 @@ describe('testing src/index.ts', () => {
     `)
   })
 
-  it('should support for-await-of with sync iterator', done => {  
+  it('should support for-await-of with sync iterator', done => {
     const interpreter = new Sval()
-    interpreter.import({ expect, done })
+    interpreter.import({
+      expect,
+      done
+    })
     interpreter.run(`
       const iterable = {
         [Symbol.iterator]() {
@@ -155,9 +169,12 @@ describe('testing src/index.ts', () => {
     `)
   })
 
-  it('should support for-await-of with async iterator', done => {  
+  it('should support for-await-of with async iterator', done => {
     const interpreter = new Sval()
-    interpreter.import({ expect, done })
+    interpreter.import({
+      expect,
+      done
+    })
     interpreter.run(`
       const asyncIterable = {
         [Symbol.asyncIterator]() {
@@ -186,9 +203,12 @@ describe('testing src/index.ts', () => {
     `)
   })
 
-  it('should support for-await-of with async generator', done => {  
+  it('should support for-await-of with async generator', done => {
     const interpreter = new Sval()
-    interpreter.import({ expect, done })
+    interpreter.import({
+      expect,
+      done
+    })
     interpreter.run(`
       async function* asyncGenerator() {
         var i = 0
@@ -208,9 +228,11 @@ describe('testing src/index.ts', () => {
       })()
     `)
   })
-  
-  it('should try statement run normally', () => {  
-    const interpreter = new Sval({ ecmaVer: 10 })
+
+  it('should try statement run normally', () => {
+    const interpreter = new Sval({
+      ecmaVer: 10
+    })
     interpreter.run(`
       try {
         throw 1
