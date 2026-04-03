@@ -1,6 +1,16 @@
-import { NOINIT, DEADZONE } from '../share/const'
-import { Variable, Var, Prop } from './variable'
-import { create, define } from '../share/util'
+import {
+  NOINIT,
+  DEADZONE
+} from '../share/const'
+import {
+  Variable,
+  Var,
+  Prop
+} from './variable'
+import {
+  create,
+  define
+} from '../share/util'
 
 /**
  * Scope simulation class
@@ -25,7 +35,9 @@ export default class Scope {
    * @private
    * @readonly
    */
-  private readonly context: { [key: string]: Var } = create(null)
+  private readonly context: {
+    [key: string]: Var
+  } = create(null)
 
   /**
    * Create a simulated scope
@@ -45,7 +57,7 @@ export default class Scope {
    */
   global(): Scope {
     let scope: Scope = this
-    while(scope.parent) {
+    while (scope.parent) {
       scope = scope.parent
     }
     return scope
@@ -93,11 +105,11 @@ export default class Scope {
    * @param name variable identifier name
    * @param value variable value
    */
-  var(name: string, value?: any) {
+  var (name: string, value ? : any) {
     let scope: Scope = this
 
     // Find the closest function scope
-    while(scope.parent && !scope.isolated) {
+    while (scope.parent && !scope.isolated) {
       scope = scope.parent
     }
 
@@ -117,7 +129,11 @@ export default class Scope {
     if (!scope.parent) {
       const win = scope.find('window').get()
       if (value !== NOINIT) {
-        define(win, name, { value, writable: true, enumerable: true })
+        define(win, name, {
+          value,
+          writable: true,
+          enumerable: true
+        })
       }
     }
   }
@@ -127,7 +143,7 @@ export default class Scope {
    * @param name variable identifier name
    * @param value variable value
    */
-  let(name: string, value: any) {
+  let (name: string, value: any) {
     const variable = this.context[name]
     if (!variable || variable.get() === DEADZONE) {
       this.context[name] = new Var('let', value)
@@ -141,7 +157,7 @@ export default class Scope {
    * @param name variable identifier name
    * @param value variable value
    */
-  const(name: string, value: any) {
+  const (name: string, value: any) {
     const variable = this.context[name]
     if (!variable || variable.get() === DEADZONE) {
       this.context[name] = new Var('const', value)
