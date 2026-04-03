@@ -1,7 +1,7 @@
 import Sval from '../src'
 
 describe('testing src/index.ts', () => {
-  it('should excute function normally', () => {  
+  it('should excute function normally', () => {
     const interpreter = new Sval()
     interpreter.run('!function(){exports.a=1}()')
     expect(interpreter.exports.a).toBe(1)
@@ -28,7 +28,7 @@ describe('testing src/index.ts', () => {
     expect(interpreter.exports.b).toBe(2)
   })
 
-  it('should yield generator normally', () => {  
+  it('should yield generator normally', () => {
     const interpreter = new Sval()
     interpreter.run(`
       function* a() {
@@ -46,7 +46,7 @@ describe('testing src/index.ts', () => {
     `)
     expect(interpreter.exports.res).toEqual([1, 2, 3])
   })
-  it('should proxy generator normally', () => {  
+  it('should proxy generator normally', () => {
     const interpreter = new Sval()
     interpreter.run(`
       function* a() {
@@ -63,9 +63,12 @@ describe('testing src/index.ts', () => {
     expect(interpreter.exports.res).toEqual([1, 2, 3])
   })
 
-  it('should excute async function normally', done => {  
+  it('should excute async function normally', done => {
     const interpreter = new Sval()
-    interpreter.import({ expect, done })
+    interpreter.import({
+      expect,
+      done
+    })
     interpreter.run(`
       a()
       async function a() {
@@ -78,9 +81,13 @@ describe('testing src/index.ts', () => {
       }
     `)
   })
-  it('should excute async function normally 2', done => {  
+  it('should excute async function normally 2', done => {
     const interpreter = new Sval()
-    interpreter.import({ getItem, expect, done })
+    interpreter.import({
+      getItem,
+      expect,
+      done
+    })
     interpreter.run(`
       a()
       async function a() {
@@ -92,14 +99,19 @@ describe('testing src/index.ts', () => {
         done()
       }
     `)
+
     function getItem(n: any) {
       return new Promise(resolve => setTimeout(resolve, 5, n))
     }
   })
 
-  it('should excute async function with params', done => {  
+  it('should excute async function with params', done => {
     const interpreter = new Sval()
-    interpreter.import({ getItem, expect, done })
+    interpreter.import({
+      getItem,
+      expect,
+      done
+    })
     interpreter.run(`
       a([1, 2, 3], [1, 2, 3])
       async function a(input, expected) {
@@ -111,14 +123,19 @@ describe('testing src/index.ts', () => {
         done()
       }
     `)
+
     function getItem(n) {
       return new Promise(resolve => setTimeout(resolve, 5, n))
     }
   })
 
-  it('should excute async generator normally', done => {  
+  it('should excute async generator normally', done => {
     const interpreter = new Sval()
-    interpreter.import({ getItem, expect, done })
+    interpreter.import({
+      getItem,
+      expect,
+      done
+    })
     interpreter.run(`
       const res = []
       async function* a() {
@@ -135,14 +152,19 @@ describe('testing src/index.ts', () => {
         done()
       })
     `)
+
     function getItem(n: any) {
       return new Promise(resolve => setTimeout(resolve, 5, n))
     }
   })
 
-  it('should support async generator with throwing error', (done) => {  
+  it('should support async generator with throwing error', (done) => {
     const interpreter = new Sval()
-    interpreter.import({ getItem, expect, done })
+    interpreter.import({
+      getItem,
+      expect,
+      done
+    })
     interpreter.run(`
       const res = []
       async function* a() {
@@ -161,14 +183,19 @@ describe('testing src/index.ts', () => {
         done()
       })
     `)
+
     function getItem(n: any) {
       return new Promise(resolve => setTimeout(resolve, 5, n))
     }
   })
 
-  it('should support async generator with throwing error in generator', (done) => {  
+  it('should support async generator with throwing error in generator', (done) => {
     const interpreter = new Sval()
-    interpreter.import({ getItem, expect, done })
+    interpreter.import({
+      getItem,
+      expect,
+      done
+    })
     interpreter.run(`
       const res = []
       let visited = false
@@ -198,6 +225,7 @@ describe('testing src/index.ts', () => {
         done()
       }, 60)
     `)
+
     function getItem(n: any) {
       if (n === 4) throw 4 // throw error when doing next
       return new Promise(resolve => setTimeout(resolve, 5, n))
@@ -308,9 +336,11 @@ describe('testing src/index.ts', () => {
   })
 
   // https://github.com/Siubaak/sval/issues/94
-  it('should accept function destructured parameters', () => {  
+  it('should accept function destructured parameters', () => {
     const interpreter = new Sval()
-    interpreter.import({ expect })
+    interpreter.import({
+      expect
+    })
     interpreter.run(`
       expect((([a, b, c]) => a + b + c)([1, 2, 3])).toEqual(6)
       expect((([a, [b, { c }]]) => a + b + c)([1, [2, { c: 3 }]])).toEqual(6)
