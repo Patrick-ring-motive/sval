@@ -80,8 +80,7 @@ export function* VariableDeclarator(
         scope[kind](name, value)
       }
       if (
-        node.init &&
-        ['ClassExpression', 'FunctionExpression', 'ArrowFunctionExpression']
+        node.init && ['ClassExpression', 'FunctionExpression', 'ArrowFunctionExpression']
         .indexOf(node.init.type) !== -1 &&
         !value.name
       ) {
