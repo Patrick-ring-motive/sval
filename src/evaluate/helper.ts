@@ -1,9 +1,31 @@
-import { RETURN, SUPER, NOCTOR, CLSCTOR, NEWTARGET, SUPERCALL } from '../share/const'
-import { VariableDeclaration, ClassBody, PropertyDefinition } from './declaration'
-import { runAsync, runAsyncOptions } from '../share/async'
-import { define, inherits, assign } from '../share/util'
-import { Identifier } from '../evaluate_n/identifier'
-import { BlockStatement } from './statement'
+import {
+  RETURN,
+  SUPER,
+  NOCTOR,
+  CLSCTOR,
+  NEWTARGET,
+  SUPERCALL
+} from '../share/const'
+import {
+  VariableDeclaration,
+  ClassBody,
+  PropertyDefinition
+} from './declaration'
+import {
+  runAsync,
+  runAsyncOptions
+} from '../share/async'
+import {
+  define,
+  inherits,
+  assign
+} from '../share/util'
+import {
+  Identifier
+} from '../evaluate_n/identifier'
+import {
+  BlockStatement
+} from './statement'
 import * as acorn from 'acorn'
 import Scope from '../scope'
 import evaluate from '.'
@@ -17,7 +39,7 @@ import {
 } from './pattern'
 
 export interface hoistOptions {
-  onlyBlock?: boolean
+  onlyBlock ? : boolean
 }
 
 export function* hoist(
@@ -25,7 +47,9 @@ export function* hoist(
   scope: Scope,
   options: hoistOptions = {}
 ) {
-  const { onlyBlock = false } = options
+  const {
+    onlyBlock = false
+  } = options
   const funcDclrList: any[] = []
   const funcDclrIdxs: number[] = []
   for (let i = 0; i < block.body.length; i++) {
@@ -34,10 +58,13 @@ export function* hoist(
       funcDclrList.push(statement)
       funcDclrIdxs.push(i)
     } else if (
-      statement.type === 'VariableDeclaration'
-      && ['const', 'let'].indexOf(statement.kind) !== -1
+      statement.type === 'VariableDeclaration' &&
+      ['const', 'let'].indexOf(statement.kind) !== -1
     ) {
-      yield* VariableDeclaration(statement, scope, { hoist: true, onlyBlock: true })
+      yield* VariableDeclaration(statement, scope, {
+        hoist: true,
+        onlyBlock: true
+      })
     } else if (!onlyBlock) {
       yield* hoistVarRecursion(statement as acorn.Statement, scope)
     }
@@ -50,19 +77,25 @@ export function* hoist(
   }
 }
 
-function* hoistVarRecursion(statement: acorn.Statement, scope: Scope): IterableIterator<any> {
+function* hoistVarRecursion(statement: acorn.Statement, scope: Scope): IterableIterator < any > {
   switch (statement.type) {
     case 'VariableDeclaration':
-      yield* VariableDeclaration(statement, scope, { hoist: true })
+      yield* VariableDeclaration(statement, scope, {
+        hoist: true
+      })
       break
     case 'ForInStatement':
     case 'ForOfStatement':
       if (statement.left.type === 'VariableDeclaration') {
-        yield* VariableDeclaration(statement.left, scope, { hoist: true })
+        yield* VariableDeclaration(statement.left, scope, {
+          hoist: true
+        })
       }
     case 'ForStatement':
       if (statement.type === 'ForStatement' && statement.init.type === 'VariableDeclaration') {
-        yield* VariableDeclaration(statement.init, scope, { hoist: true })
+        yield* VariableDeclaration(statement.init, scope, {
+          hoist: true
+        })
       }
     case 'WhileStatement':
     case 'DoWhileStatement':
@@ -108,7 +141,7 @@ function* hoistVarRecursion(statement: acorn.Statement, scope: Scope): IterableI
   }
 }
 
-export function* pattern(node: acorn.Pattern, scope: Scope, options: PatternOptions = {}): IterableIterator<any> {
+export function* pattern(node: acorn.Pattern, scope: Scope, options: PatternOptions = {}): IterableIterator < any > {
   switch (node.type) {
     case 'ObjectPattern':
       return yield* ObjectPattern(node, scope, options)
@@ -124,24 +157,30 @@ export function* pattern(node: acorn.Pattern, scope: Scope, options: PatternOpti
 }
 
 export interface CtorOptions {
-  construct?: (object: any) => Generator
-  superClass?: (...args: any[]) => any
-  defProp?: boolean
+  construct ? : (object: any) => Generator
+  superClass ? : (...args: any[]) => any
+  defProp ? : boolean
 }
 
-import { createFunc as createAnotherFunc } from /*<replace by:='../evaluate/helper'>*/'../evaluate_n/helper'/*</replace>*/
+import {
+  createFunc as createAnotherFunc
+} from /*<replace by:='../evaluate/helper'>*/ '../evaluate_n/helper' /*</replace>*/
 export function createFunc(
   node: acorn.FunctionDeclaration | acorn.FunctionExpression | acorn.ArrowFunctionExpression,
   scope: Scope,
   options: CtorOptions = {}
 ): any {
-  if (/*<replace by:=node.generator\s||\snode.async>*/!node.generator && !node.async/*</replace>*/) {
+  if ( /*<replace by:=node.generator\s||\snode.async>*/ !node.generator && !node.async /*</replace>*/ ) {
     return createAnotherFunc(node, scope, options)
   }
 
-  const { superClass, construct, defProp } = options
+  const {
+    superClass,
+    construct,
+    defProp
+  } = options
   const params = node.params
-  const tmpFunc = function* (...args: any[]) {
+  const tmpFunc = function*(...args: any[]) {
     const subScope: Scope = new Scope(scope, true)
     if (node.type !== 'ArrowFunctionExpression' || defProp) {
       subScope.const('this', this)
@@ -161,9 +200,15 @@ export function createFunc(
       if (param.type === 'Identifier') {
         subScope.var(param.name, args[i])
       } else if (param.type === 'RestElement') {
-        yield* RestElement(param, subScope, { kind: 'var', feed: args.slice(i) })
+        yield* RestElement(param, subScope, {
+          kind: 'var',
+          feed: args.slice(i)
+        })
       } else {
-        yield* pattern(param, subScope, { kind: 'var', feed: args[i] })
+        yield* pattern(param, subScope, {
+          kind: 'var',
+          feed: args[i]
+        })
       }
     }
 
@@ -187,49 +232,65 @@ export function createFunc(
     }
   }
 
-  let func: any /*<add>*//*= tmpFunc*//*</add>*/
+  let func: any /*<add>*/ /*= tmpFunc*/ /*</add>*/
   /*<remove>*/
   if (node.async && node.generator) {
-    func = function (): AsyncIterator<any> {
+    func = function(): AsyncIterator < any > {
       const iterator = tmpFunc.apply(this, arguments)
-      let last: Promise<any> = Promise.resolve()
+      let last: Promise < any > = Promise.resolve()
       let hasCatch = false
       const run = (opts: runAsyncOptions) =>
         last = last
-          .then(() => runAsync(iterator, assign({ fullRet: true }, opts)))
-          .catch(err => {
-            if (!hasCatch) {
-              hasCatch = true
-              return Promise.reject(err)
-            }
-          })
-      const asyncIterator: AsyncIterator<any> = {
-        next: (res?: any) => run({ res }),
-        throw: (err?: any) => run({ err }),
-        return: (ret?: any) => run({ ret })
+        .then(() => runAsync(iterator, assign({
+          fullRet: true
+        }, opts)))
+        .catch(err => {
+          if (!hasCatch) {
+            hasCatch = true
+            return Promise.reject(err)
+          }
+        })
+      const asyncIterator: AsyncIterator < any > = {
+        next: (res ? : any) => run({
+          res
+        }),
+        throw: (err ? : any) => run({
+          err
+        }),
+        return: (ret ? : any) => run({
+          ret
+        })
       }
       if (typeof Symbol === 'function') {
-        (asyncIterator as any)[Symbol.iterator] = function () { return this }
+        (asyncIterator as any)[Symbol.iterator] = function() {
+          return this
+        }
       }
       return asyncIterator
     }
   } else if (node.async) {
-    func = function () { return runAsync(tmpFunc.apply(this, arguments)) }
+    func = function() {
+      return runAsync(tmpFunc.apply(this, arguments))
+    }
   } else {
     func = tmpFunc
   }
-  define(func, NOCTOR, { value: true })
+  define(func, NOCTOR, {
+    value: true
+  })
   /*</remove>*/
-  /*<add>*//*
-  if (node.type === 'ArrowFunctionExpression') {
-    define(func, NOCTOR, { value: true })
-  }
-  *//*</add>*/
+  /*<add>*/
+  /*
+    if (node.type === 'ArrowFunctionExpression') {
+      define(func, NOCTOR, { value: true })
+    }
+    */
+  /*</add>*/
 
   define(func, 'name', {
-    value: (node as acorn.FunctionDeclaration).id
-      && (node as acorn.FunctionDeclaration).id.name
-      || '',
+    value: (node as acorn.FunctionDeclaration).id &&
+      (node as acorn.FunctionDeclaration).id.name ||
+      '',
     configurable: true
   })
   define(func, 'length', {
@@ -247,16 +308,19 @@ export function* createClass(
   const superClass = yield* evaluate(node.superClass, scope)
 
   const methodBody = node.body.body
-  const construct = function* (object: any) {
+  const construct = function*(object: any) {
     for (let i = 0; i < methodBody.length; i++) {
       const def = methodBody[i]
       if (def.type === 'PropertyDefinition' && !def.static) {
-        yield* PropertyDefinition(def, scope, { klass: object, superClass })
+        yield* PropertyDefinition(def, scope, {
+          klass: object,
+          superClass
+        })
       }
     }
   }
 
-  let klass = function* () {
+  let klass = function*() {
     yield* construct(this)
     if (superClass) {
       superClass.apply(this)
@@ -265,7 +329,10 @@ export function* createClass(
   for (let i = 0; i < methodBody.length; i++) {
     const method = methodBody[i]
     if (method.type === 'MethodDefinition' && method.kind === 'constructor') {
-      klass = createFunc(method.value, scope, { superClass, construct })
+      klass = createFunc(method.value, scope, {
+        superClass,
+        construct
+      })
       break
     }
   }
@@ -274,9 +341,14 @@ export function* createClass(
     inherits(klass, superClass)
   }
 
-  yield* ClassBody(node.body, scope, { klass, superClass })
+  yield* ClassBody(node.body, scope, {
+    klass,
+    superClass
+  })
 
-  define(klass, CLSCTOR, { value: true })
+  define(klass, CLSCTOR, {
+    value: true
+  })
   define(klass, 'name', {
     value: node.id && node.id.name || '',
     configurable: true
@@ -294,22 +366,32 @@ export function* ForXHandler(
   scope: Scope,
   options: ForXHandlerOptions
 ) {
-  const { value } = options
+  const {
+    value
+  } = options
   const left = node.left
 
   const subScope = new Scope(scope)
   if (left.type === 'VariableDeclaration') {
-    yield* VariableDeclaration(left, subScope, { feed: value })
+    yield* VariableDeclaration(left, subScope, {
+      feed: value
+    })
   } else if (left.type === 'Identifier') {
-    const variable = yield* Identifier(left, scope, { getVar: true })
+    const variable = yield* Identifier(left, scope, {
+      getVar: true
+    })
     variable.set(value)
   } else {
-    yield* pattern(left, scope, { feed: value })
+    yield* pattern(left, scope, {
+      feed: value
+    })
   }
 
   let result: any
   if (node.body.type === 'BlockStatement') {
-    result = yield* BlockStatement(node.body, subScope, { invasived: true })
+    result = yield* BlockStatement(node.body, subScope, {
+      invasived: true
+    })
   } else {
     result = yield* evaluate(node.body, subScope)
   }
