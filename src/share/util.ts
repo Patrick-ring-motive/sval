@@ -89,247 +89,308 @@ try {
     try {
       globalObj.Object = Object
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.Function = Function
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.Array = Array
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.Number = Number
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.parseFloat = parseFloat
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.parseInt = parseInt
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.Infinity = Infinity
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.NaN = NaN
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.undefined = undefined
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.Boolean = Boolean
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.String = String
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.Symbol = Symbol
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.Date = Date
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.Promise = Promise
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.RegExp = RegExp
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.Error = Error
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.EvalError = EvalError
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.RangeError = RangeError
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.ReferenceError = ReferenceError
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.SyntaxError = SyntaxError
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.TypeError = TypeError
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.URIError = URIError
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.JSON = JSON
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.Math = Math
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.console = console
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.Intl = Intl
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.ArrayBuffer = ArrayBuffer
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.Uint8Array = Uint8Array
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.Int8Array = Int8Array
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.Uint16Array = Uint16Array
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.Int16Array = Int16Array
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.Uint32Array = Uint32Array
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.Int32Array = Int32Array
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.Float32Array = Float32Array
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.Float64Array = Float64Array
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.Uint8ClampedArray = Uint8ClampedArray
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.DataView = DataView
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.Map = Map
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.Set = Set
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.WeakMap = WeakMap
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.WeakSet = WeakSet
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.Proxy = Proxy
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.Reflect = Reflect
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.BigInt = BigInt
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.decodeURI = decodeURI
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.decodeURIComponent = decodeURIComponent
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.encodeURI = encodeURI
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.encodeURIComponent = encodeURIComponent
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.escape = escape
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.unescape = unescape
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.eval = eval
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.isFinite = isFinite
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.isNaN = isNaN
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.SharedArrayBuffer = SharedArrayBuffer
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.Atomics = Atomics
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.WebAssembly = WebAssembly
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.clearInterval = clearInterval
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.clearTimeout = clearTimeout
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.setInterval = setInterval
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.setTimeout = setTimeout
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     try {
       globalObj.crypto = crypto
     } catch (err) {
-      /* empty */ }
+      /* empty */
+    }
     names = getOwnNames(globalObj)
   }
 }
@@ -342,7 +403,8 @@ for (let i = 0; i < names.length; i++) {
   try {
     win[name] = globalObj[name]
   } catch (err) {
-    /* empty */ }
+    /* empty */
+  }
 }
 export const WINDOW = createSymbol('window')
 export function createSandBox() {
