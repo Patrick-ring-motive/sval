@@ -2,7 +2,7 @@ export type VarKind = 'var' | 'let' | 'const'
 
 export interface Variable {
   get(): any,
-  set(value: any): boolean,
+    set(value: any): boolean,
 }
 
 export class Var implements Variable {
