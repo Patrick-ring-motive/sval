@@ -58,8 +58,7 @@ export function* hoist(
       funcDclrList.push(statement)
       funcDclrIdxs.push(i)
     } else if (
-      statement.type === 'VariableDeclaration' &&
-      ['const', 'let'].indexOf(statement.kind) !== -1
+      statement.type === 'VariableDeclaration' && ['const', 'let'].indexOf(statement.kind) !== -1
     ) {
       yield* VariableDeclaration(statement, scope, {
         hoist: true,
