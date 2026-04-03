@@ -1,6 +1,17 @@
-import { BREAK, CONTINUE, RETURN, AWAIT } from '../share/const'
-import { hoist, pattern, ForXHandler } from './helper'
-import { getAsyncIterator } from '../share/util'
+import {
+  BREAK,
+  CONTINUE,
+  RETURN,
+  AWAIT
+} from '../share/const'
+import {
+  hoist,
+  pattern,
+  ForXHandler
+} from './helper'
+import {
+  getAsyncIterator
+} from '../share/util'
 import * as acorn from 'acorn'
 import Scope from '../scope'
 import evaluate from '.'
@@ -10,8 +21,8 @@ export function* ExpressionStatement(node: acorn.ExpressionStatement, scope: Sco
 }
 
 export interface BlockOptions {
-  invasived?: boolean
-  hoisted?: boolean
+  invasived ? : boolean
+  hoisted ? : boolean
 }
 
 export function* BlockStatement(
@@ -21,13 +32,15 @@ export function* BlockStatement(
 ) {
   const {
     invasived = false,
-    hoisted = false,
+      hoisted = false,
   } = options
 
   const subScope = invasived ? scope : new Scope(scope)
 
   if (!hoisted) {
-    yield* hoist(block, subScope, { onlyBlock: true })
+    yield* hoist(block, subScope, {
+      onlyBlock: true
+    })
   }
 
   for (let i = 0; i < block.body.length; i++) {
@@ -38,11 +51,11 @@ export function* BlockStatement(
   }
 }
 
-export function* EmptyStatement(): IterableIterator<any> {
+export function* EmptyStatement(): IterableIterator < any > {
   // No operation here
 }
 
-export function* DebuggerStatement(): IterableIterator<any> {
+export function* DebuggerStatement(): IterableIterator < any > {
   debugger
 }
 
@@ -73,10 +86,11 @@ export function* SwitchStatement(node: acorn.SwitchStatement, scope: Scope) {
   for (let i = 0; i < node.cases.length; i++) {
     const eachCase = node.cases[i]
     if (
-      !matched
-      && (
-        !eachCase.test  // default
-        || (yield* evaluate(eachCase.test, scope)) === discriminant
+      !matched &&
+      (
+        !eachCase.test // default
+        ||
+        (yield* evaluate(eachCase.test, scope)) === discriminant
       )
     ) {
       matched = true
@@ -118,7 +132,9 @@ export function* TryStatement(node: acorn.TryStatement, scope: Scope) {
           const name = param.name
           subScope.var(name, err)
         } else {
-          yield* pattern(param, scope, { feed: err })
+          yield* pattern(param, scope, {
+            feed: err
+          })
         }
       }
       return yield* CatchClause(node.handler, subScope)
@@ -136,7 +152,9 @@ export function* TryStatement(node: acorn.TryStatement, scope: Scope) {
 }
 
 export function* CatchClause(node: acorn.CatchClause, scope: Scope) {
-  return yield* BlockStatement(node.body, scope, { invasived: true })
+  return yield* BlockStatement(node.body, scope, {
+    invasived: true
+  })
 }
 
 export function* WhileStatement(node: acorn.WhileStatement, scope: Scope) {
@@ -167,16 +185,16 @@ export function* DoWhileStatement(node: acorn.DoWhileStatement, scope: Scope) {
 
 export function* ForStatement(node: acorn.ForStatement, scope: Scope) {
   const forScope = new Scope(scope)
-  
+
   for (
-    yield* evaluate(node.init, forScope);
-    node.test ? (yield* evaluate(node.test, forScope)) : true;
-    yield* evaluate(node.update, forScope)
+    yield* evaluate(node.init, forScope); node.test ? (yield* evaluate(node.test, forScope)) : true; yield* evaluate(node.update, forScope)
   ) {
     const subScope = new Scope(forScope)
     let result: any
     if (node.body.type === 'BlockStatement') {
-      result = yield* BlockStatement(node.body, subScope, { invasived: true })
+      result = yield* BlockStatement(node.body, subScope, {
+        invasived: true
+      })
     } else {
       result = yield* evaluate(node.body, subScope)
     }
@@ -193,7 +211,9 @@ export function* ForStatement(node: acorn.ForStatement, scope: Scope) {
 
 export function* ForInStatement(node: acorn.ForInStatement, scope: Scope) {
   for (const value in yield* evaluate(node.right, scope)) {
-    const result = yield* ForXHandler(node, scope, { value })
+    const result = yield* ForXHandler(node, scope, {
+      value
+    })
     if (result === BREAK) {
       break
     } else if (result === CONTINUE) {
@@ -211,11 +231,11 @@ export function* ForOfStatement(node: acorn.ForOfStatement, scope: Scope): any {
     const iterator = getAsyncIterator(right)
     let ret: any
     for (
-      AWAIT.RES = iterator.next(), ret = yield AWAIT;
-      !ret.done;
-      AWAIT.RES = iterator.next(), ret = yield AWAIT
+      AWAIT.RES = iterator.next(), ret = yield AWAIT; !ret.done; AWAIT.RES = iterator.next(), ret = yield AWAIT
     ) {
-      const result = yield* ForXHandler(node, scope, { value: ret.value })
+      const result = yield* ForXHandler(node, scope, {
+        value: ret.value
+      })
       if (result === BREAK) {
         break
       } else if (result === CONTINUE) {
@@ -225,9 +245,11 @@ export function* ForOfStatement(node: acorn.ForOfStatement, scope: Scope): any {
       }
     }
   } else {
-  /*</remove>*/
+    /*</remove>*/
     for (const value of right) {
-      const result = yield* ForXHandler(node, scope, { value })
+      const result = yield* ForXHandler(node, scope, {
+        value
+      })
       if (result === BREAK) {
         break
       } else if (result === CONTINUE) {
@@ -236,7 +258,7 @@ export function* ForOfStatement(node: acorn.ForOfStatement, scope: Scope): any {
         return result
       }
     }
-  /*<remove>*/
+    /*<remove>*/
   }
   /*</remove>*/
 }
