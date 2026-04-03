@@ -1,8 +1,18 @@
-import { createSymbol } from './util'
+import {
+  createSymbol
+} from './util'
 
-export const AWAIT: { RES: any } = { RES: undefined }
+export const AWAIT: {
+  RES: any
+} = {
+  RES: undefined
+}
 
-export const RETURN: { RES: any } = { RES: undefined }
+export const RETURN: {
+  RES: any
+} = {
+  RES: undefined
+}
 
 export const CONTINUE = createSymbol('continue')
 
